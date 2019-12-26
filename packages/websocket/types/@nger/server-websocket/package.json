@@ -1,0 +1,28 @@
+{
+  "name": "@nger/server-websocket.types",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "imeepos <admin@meepo.com.cn>",
+  "homepage": "",
+  "license": "ISC",
+  "types": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://10.0.0.202:9008"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@nger/server": "^0.0.2",
+    "@types/websocket": "^1.0.0",
+    "websocket": "^1.0.31"
+  },
+  "main": "lib/index.d.ts"
+}
