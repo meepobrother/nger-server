@@ -13,6 +13,7 @@ const tokens_1 = require("./tokens");
 const core_1 = require("@nger/core");
 const http_1 = require("http");
 const http_2 = require("@nger/http");
+const operators_1 = require("rxjs/operators");
 let ServerModule = class ServerModule {
 };
 ServerModule = __decorate([
@@ -67,40 +68,50 @@ ServerModule = __decorate([
                             headers: new http_2.HttpHeaders(req.headers)
                         });
                         const client = injector.get(http_2.HttpClient);
-                        res.setDefaultEncoding('utf8');
-                        res.setTimeout(60 * 60 * 3);
-                        client.request(request).subscribe(response => {
+                        res.setTimeout(60 * 60 * 30);
+                        let hasSend = false;
+                        function sendData(data) {
+                            res.write(data);
+                        }
+                        client.request(request).pipe(operators_1.takeLast(1)).subscribe(response => {
                             if (response instanceof http_2.HttpResponse) {
-                                response.headers.forEach((key, val) => {
-                                    res.setHeader(key, val);
-                                });
+                                if (!hasSend) {
+                                    response.headers.forEach((key, val) => {
+                                        res.setHeader(key, val);
+                                    });
+                                }
+                                hasSend = true;
                                 res.statusCode = 200;
                                 if (typeof response.body === 'object') {
-                                    res.write(Buffer.from(JSON.stringify(response.body)));
+                                    const data = Buffer.from(JSON.stringify(response.body));
+                                    sendData(data);
                                 }
                                 else if (typeof response.body === 'string' ||
                                     typeof response.body === 'number' ||
                                     typeof response.body === 'boolean' ||
                                     typeof response.body === 'bigint') {
-                                    res.write(Buffer.from(`${response.body}`));
+                                    const data = Buffer.from(`${response.body}`);
+                                    sendData(data);
                                 }
                                 else if (Buffer.isBuffer(response.body)) {
-                                    res.write(response.body);
+                                    const data = response.body;
+                                    sendData(data);
                                 }
                                 else if (Array.isArray(response.body)) {
-                                    res.write(Buffer.from(JSON.stringify(response.body)));
+                                    const data = Buffer.from(JSON.stringify(response.body));
+                                    sendData(data);
                                 }
                                 else {
-                                    res.statusCode = 500;
-                                    res.statusMessage = "NOT SUPPORT RESPONSE TYPE";
-                                    res.end();
+                                    throw new Error(`can not support ${typeof response.body}`);
                                 }
                             }
                         }, (err) => {
                             res.statusCode = err.status || err.code || 500;
-                            res.statusMessage = err.message;
-                            res.end();
+                            res.statusMessage = `SERVER ERROR`;
+                            res.end(err.stack);
                         }, () => {
+                            res.statusCode = 200;
+                            res.statusMessage = 'ok';
                             res.end();
                         });
                     }

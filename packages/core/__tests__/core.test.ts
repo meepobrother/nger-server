@@ -9,9 +9,10 @@ import {
 import {
   Get, HttpModule
 } from "@nger/http";
-import { HttpNodeModule } from '@nger/http-node'
-import { ServerModule, SERVER } from '../lib'
-import { from, Subject } from 'rxjs'
+import { HttpNodeModule } from '@nger/http-node';
+import { ServerModule, SERVER } from '../lib';
+import { of } from 'rxjs';
+
 @Controller({
   path: '/',
   providers: []
@@ -19,16 +20,7 @@ import { from, Subject } from 'rxjs'
 export class DemoController {
   @Get(`add`)
   add(@Cookies(`username`) username: string) {
-    const sub = new Subject();
-    sub.next(`add`)
-    let i = 0;
-    setInterval(() => {
-      if (i === 5) {
-        sub.complete();
-      }
-      sub.next(`${++i}`)
-    }, 1000)
-    return sub;
+    return of({ username: username || 'username' })
   }
 }
 
@@ -43,11 +35,12 @@ export class ChildModule { }
     HttpModule,
     ChildModule,
     ServerModule,
-    HttpNodeModule,
+    HttpNodeModule
   ],
   providers: []
 })
 export class AppModule { }
+
 corePlatform()
   .bootstrapModule(AppModule)
   .then(res => {

@@ -2,6 +2,7 @@ import { SERVER, SERVER_LISTENER } from "./tokens";
 import { Module, Injector } from "@nger/core";
 import { createServer, IncomingMessage, ServerResponse } from "http";
 import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@nger/http'
+import { takeLast } from 'rxjs/operators'
 @Module({
   providers: [
     {
@@ -54,7 +55,9 @@ import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@nger/http'
           function sendData(data: Buffer) {
             res.write(data)
           }
-          client.request(request).subscribe(response => {
+          client.request(request).pipe(
+            takeLast(1)
+          ).subscribe(response => {
             if (response instanceof HttpResponse) {
               if (!hasSend) {
                 response.headers.forEach((key, val) => {
