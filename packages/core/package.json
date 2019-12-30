@@ -1,6 +1,6 @@
 {
   "name": "@nger/server",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "> TODO: description",
   "author": "imeepos <admin@meepo.com.cn>",
   "homepage": "",
@@ -15,12 +15,12 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "http://10.0.0.202:9008"
+    "access": "public"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@nger/core": "^1.8.58"
+    "@nger/http-node": "^1.0.21"
   }
 }
