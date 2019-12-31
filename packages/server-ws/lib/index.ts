@@ -1,18 +1,33 @@
-import { Module, Injector } from "@nger/core";
-import { SERVER_WS } from "./tokens";
+import { Module, Injector, ModuleWithProviders, InjectionToken } from "@nger/core";
+import { SERVER_WS, SERVER_WS_OPTIONS } from "./tokens";
 import { SERVER } from "@nger/server";
-import { Server } from "ws";
+import { Server, ServerOptions } from "ws";
 @Module({
   providers: [
     {
       provide: SERVER_WS,
       useFactory: (injector: Injector) => {
         const server = injector.get(SERVER);
-        return new Server({ server });
+        const options = injector.get(SERVER_WS_OPTIONS, { path: '/graphql' });
+        const app = new Server({ ...options, server });
+        return app;
       },
       deps: [Injector]
     }
   ]
 })
-export class WsServerModule {}
+export class ServerWsModule {
+  static forRoot(options: ServerOptions | InjectionToken<ServerOptions>): ModuleWithProviders {
+    return {
+      ngModule: ServerWsModule,
+      providers: [{
+        provide: SERVER_WS_OPTIONS,
+        useFactory: (injector: Injector) => {
+          return options instanceof InjectionToken ? injector.get(options) : options;
+        },
+        deps: [Injector]
+      }]
+    }
+  }
+}
 export * from './tokens';

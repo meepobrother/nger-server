@@ -1,6 +1,6 @@
 {
   "name": "@nger/server-ws",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "> TODO: description",
   "author": "imeepos <admin@meepo.com.cn>",
   "homepage": "",
@@ -21,8 +21,9 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@nger/server": "^0.0.2",
+    "@nger/server": "^0.0.7",
     "@types/ws": "^6.0.4",
+    "subscriptions-transport-ws": "^0.9.16",
     "ws": "^7.2.1"
   }
 }
