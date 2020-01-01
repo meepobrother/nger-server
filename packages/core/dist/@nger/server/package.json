@@ -1,6 +1,6 @@
 {
   "name": "@nger/server",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "> TODO: description",
   "author": "imeepos <admin@meepo.com.cn>",
   "homepage": "",
@@ -21,6 +21,6 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@nger/http-node": "^1.0.21"
+    "@nger/core": "^1.9.20"
   }
 }
