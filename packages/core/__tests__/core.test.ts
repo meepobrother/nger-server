@@ -1,49 +1,28 @@
-import {
-  Cookies
-} from "@nger/http";
-import {
-  corePlatform,
-  Module,
-  Controller,
-} from "@nger/core";
-import {
-  Get, HttpModule
-} from "@nger/http";
-import { HttpNodeModule } from '@nger/http-node';
+import { corePlatform, Module, setDevMode } from "@nger/core";
 import { ServerModule, SERVER } from '../lib';
-import { of } from 'rxjs';
-
-@Controller({
-  path: '/',
-  providers: []
-})
-export class DemoController {
-  @Get(`add`)
-  add(@Cookies(`username`) username: string) {
-    return of({ username: username || 'username' })
-  }
-}
-
-@Module({
-  imports: [],
-  controllers: [DemoController]
-})
-export class ChildModule { }
-
+import { StoreModule, Store } from '@nger/rx-store'
+import { EffectsModule } from '@nger/rx-effects'
+import { DemoEffects } from "./effects";
 @Module({
   imports: [
-    HttpModule,
-    ChildModule,
-    ServerModule,
-    HttpNodeModule
-  ],
-  providers: []
+    StoreModule.forRoot(),
+    EffectsModule.forRoot([
+      DemoEffects
+    ]),
+    ServerModule
+  ]
 })
 export class AppModule { }
-
+setDevMode(true)
 corePlatform()
   .bootstrapModule(AppModule)
   .then(res => {
+    const store = res.get(Store)
+    store.subscribe(res => {
+      console.log(res)
+    })
     const server = res.get(SERVER)
-    server.listen(9000)
+    server.listen(9000, '0.0.0.0', () => {
+      console.log(`app ready`)
+    })
   });

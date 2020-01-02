@@ -1,6 +1,6 @@
 {
   "name": "@nger/server.types",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "> TODO: description",
   "author": "imeepos <admin@meepo.com.cn>",
   "homepage": "",
@@ -20,7 +20,11 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@nger/core": "^1.9.20"
+    "@nger/core": "^1.9.20",
+    "@nger/rx-effects": "^1.1.13",
+    "@nger/rx-store": "^1.1.19",
+    "@types/uuid": "^3.4.6",
+    "uuid": "^3.3.3"
   },
   "main": "lib/index.d.ts"
 }
