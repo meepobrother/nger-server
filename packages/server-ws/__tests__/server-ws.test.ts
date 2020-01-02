@@ -3,7 +3,7 @@ import { Module, corePlatform, setDevMode } from '@nger/core'
 import { ServerModule, SERVER } from '@nger/server'
 import WebSocket from 'ws'
 import { StoreModule, Store } from '@nger/rx-store'
-import { EffectsModule} from '@nger/rx-effects'
+import { EffectsModule } from '@nger/rx-effects'
 import { DemoEffects } from './effects'
 
 setDevMode(true)
@@ -35,6 +35,11 @@ corePlatform()
             console.log(`app server`)
         })
         const socket = new WebSocket(`ws://localhost:9008`)
+        socket.on('open', () => {
+            socket.send(JSON.stringify({
+                title: 'title'
+            }))
+        })
         socket.on('message', (data: any) => {
             debugger;
         })

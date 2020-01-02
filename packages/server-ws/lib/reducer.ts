@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@nger/rx-store'
-import { connectionAction, WsConnection } from './action'
+import { connectionAction, WsConnection, closeAction, messageAction } from './action'
 export interface ServerState {
     count: number;
     list: { [key: string]: WsConnection };
@@ -18,7 +18,21 @@ export const serverReducer = createReducer(
             ...state.list,
             [`${action.id}`]: action
         }
-    }))
+    })),
+    on(closeAction, (state, action) => {
+        let { list, count } = state;
+        list[action.id].status = action.status;
+        return {
+            list,
+            count: count - 1
+        };
+    }),
+    on(messageAction, (state, action) => {
+        console.log(action);
+        const { list, count } = state;
+        list[action.id].data = action.data;
+        return state;
+    })
 )
 
 export function reducer(state: ServerState | undefined, action: Action) {
