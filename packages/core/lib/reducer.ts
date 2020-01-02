@@ -33,6 +33,7 @@ export const serverReducer = createReducer(
         res.setHeader(`Request-Id`, action.id);
         res.setHeader(`Request-Count`, state.count);
         res.setHeader(`Server-Run-Time`, `${new Date().getTime() - startTime}ms`)
+        res.setHeader(`Server-Time`, `${new Date().getTime()}`)
         res.write(Buffer.from(action.body))
         res.statusCode = action.status || 200;
         res.statusMessage = action.statusMessage || 'OK';

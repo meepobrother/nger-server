@@ -7,7 +7,7 @@ import uuidv1 from 'uuid/v1';
 import * as reducer from "./reducer";
 @Module({
   imports: [
-    StoreModule.forFeature('server', reducer.reducer)
+    StoreModule.forFeature('@nger/server', reducer.reducer)
   ],
   providers: [
     {
@@ -29,3 +29,4 @@ import * as reducer from "./reducer";
 })
 export class ServerModule { }
 export * from "./tokens";
+export * from './action';
